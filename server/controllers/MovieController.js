@@ -1,6 +1,6 @@
 import Movie from '../models/MovieModel.js'
 
-export const CreateMovie = (req, res) => {
+export const CreateMovie = async (req, res) => {
 	const body = req.body
 
 	if (!body) {
@@ -16,7 +16,7 @@ export const CreateMovie = (req, res) => {
 		return res.status(400).json({ success: false, error: err })
 	}
 
-	movie
+	await movie
 		.save()
 		.then(() => {
 			return res.status(201).json({
@@ -43,17 +43,19 @@ export const UpdateMovie = async (req, res) => {
 		})
 	}
 
-	Movie.findOne({ _id: req.params.id }, (err, movie) => {
+	await Movie.findOne({ _id: req.params.id }, (err, movie) => {
 		if (err) {
 			return res.status(404).json({
 				err,
 				message: 'Movie not found!',
 			})
 		}
+
 		movie.name = body.name
 		movie.time = body.time
 		movie.rating = body.rating
-		movie
+
+		await movie
 			.save()
 			.then(() => {
 				return res.status(200).json({
