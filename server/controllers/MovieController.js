@@ -43,7 +43,7 @@ export const UpdateMovie = async (req, res) => {
 		})
 	}
 
-	await Movie.findOne({ _id: req.params.id }, (err, movie) => {
+	await Movie.findOne({ _id: req.params.id }, async (err, movie) => {
 		if (err) {
 			return res.status(404).json({
 				err,
