@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 // components
 import Title from '../../Components/Title/Title'
@@ -12,6 +12,7 @@ import { GetAllMovies, DeleteMovieById } from '../../Utils/Api'
 import './Movies.css'
 
 const Movies = () => {
+	const Navigate = useNavigate()
 	const [Movies, SetMovies] = useState([])
 
 	useEffect(() => {
@@ -70,12 +71,17 @@ const Movies = () => {
 											<td>{item.time.join(', ')}</td>
 											<td>{item.rating}</td>
 											<td className='action'>
-												<Link
-													to={`update/${item._id}`}
+												<button
+													onClick={() =>
+														Navigate(
+															`update/${item._id}`,
+															{ replace: true }
+														)
+													}
 													className='button update'
 												>
 													Update
-												</Link>
+												</button>
 												<button
 													onClick={() =>
 														Delete(item._id)
