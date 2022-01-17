@@ -1,0 +1,24 @@
+.no-match {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.no-match .body {
+	width: 450px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+}
+.no-match h1,
+.no-match p {
+	display: inline-block;
+	padding: 10px 30px;
+	color: black;
+}
+.no-match h1 {
+	border-right: 1px solid black;
+}
