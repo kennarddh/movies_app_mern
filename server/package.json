@@ -3,10 +3,10 @@
 	"version": "1.0.0",
 	"description": "",
 	"main": "index.js",
-	"type": "module",
 	"scripts": {
-		"start": "node ./index.js",
-		"dev": "nodemon ./index.js"
+		"build": "babel ./src --out-dir ./build",
+		"start": "nodemon --exec npx babel-node ./index.js",
+		"lint": "eslint ."
 	},
 	"author": "",
 	"license": "ISC",
@@ -17,6 +17,17 @@
 		"mongoose": "^6.1.5"
 	},
 	"devDependencies": {
-		"nodemon": "^2.0.15"
+		"@babel/cli": "^7.16.8",
+		"@babel/core": "^7.16.7",
+		"@babel/node": "^7.16.8",
+		"@babel/preset-env": "^7.16.8",
+		"@babel/runtime": "^7.16.7",
+		"eslint": "^8.7.0",
+		"eslint-config-airbnb-base": "^15.0.0",
+		"eslint-config-prettier": "^8.3.0",
+		"eslint-plugin-import": "^2.25.4",
+		"eslint-plugin-prettier": "^4.0.0",
+		"nodemon": "^2.0.15",
+		"prettier": "^2.5.1"
 	}
 }

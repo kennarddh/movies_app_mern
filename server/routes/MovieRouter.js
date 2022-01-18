@@ -6,7 +6,7 @@ import {
 	DeleteMovie,
 	GetMovieById,
 	GetMovies,
-} from '../controllers/MovieController.js'
+} from '../controllers/MovieController'
 
 const router = express.Router()
 

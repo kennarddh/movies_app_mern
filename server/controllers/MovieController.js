@@ -1,7 +1,7 @@
-import Movie from '../models/MovieModel.js'
+import Movie from '../models/MovieModel'
 
 export const CreateMovie = async (req, res) => {
-	const body = req.body
+	const { body } = req
 
 	if (!body) {
 		return res.status(400).json({
@@ -11,10 +11,6 @@ export const CreateMovie = async (req, res) => {
 	}
 
 	const movie = new Movie(body)
-
-	if (!movie) {
-		return res.status(400).json({ success: false, error: err })
-	}
 
 	await movie
 		.save()
@@ -34,7 +30,7 @@ export const CreateMovie = async (req, res) => {
 }
 
 export const UpdateMovie = async (req, res) => {
-	const body = req.body
+	const { body } = req
 
 	if (!body) {
 		return res.status(400).json({
@@ -46,11 +42,9 @@ export const UpdateMovie = async (req, res) => {
 	await Movie.findOne({ _id: req.params.id })
 		.exec()
 		.then(async movie => {
-			movie.name = body.name
-			movie.time = body.time
-			movie.rating = body.rating
+			const newMovie = new Movie(body)
 
-			await movie
+			await newMovie
 				.save()
 				.then(() => {
 					return res.status(200).json({
@@ -66,12 +60,12 @@ export const UpdateMovie = async (req, res) => {
 					})
 				})
 		})
-		.catch(err =>
-			res.status(404).json({
+		.catch(err => {
+			return res.status(404).json({
 				err,
 				message: 'Movie not found!',
 			})
-		)
+		})
 }
 
 export const DeleteMovie = async (req, res) => {

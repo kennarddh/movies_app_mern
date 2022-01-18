@@ -2,8 +2,8 @@ import express from 'express'
 import cors from 'cors'
 import bodyParser from 'body-parser'
 
-import db from './db/index.js'
-import MovieRouter from './routes/MovieRouter.js'
+import db from './db'
+import MovieRouter from './routes/MovieRouter'
 
 const app = express()
 const Port = 3000
@@ -14,11 +14,13 @@ app.use(cors())
 
 app.use(bodyParser.json())
 
-db.on('error', console.error.bind(console, 'MongoDB connection error:'))
+db.on('error', error => {
+	console.log(`MongoDB connection error: ${error}`)
+})
 
 app.use('/api', MovieRouter)
 
-app.get('*', function (req, res) {
+app.get('*', (req, res) => {
 	return res.status(404).json({ success: false, error: 'Not found' })
 })
 
