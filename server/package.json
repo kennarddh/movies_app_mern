@@ -4,7 +4,7 @@
 	"description": "",
 	"scripts": {
 		"build": "babel ./src --out-dir ./build",
-		"start": "node ./build/index.js",
+		"start": "set \"NODE_ENV=production\" && node ./build/App.js",
 		"dev": "nodemon --exec npx babel-node src/app.js",
 		"lint": "eslint .",
 		"prettier": "prettier -w \"src/**/*.js\"",
@@ -15,9 +15,11 @@
 	"dependencies": {
 		"bcrypt": "^5.0.1",
 		"body-parser": "^1.19.1",
+		"compression": "^1.7.4",
 		"cors": "^2.8.5",
 		"dotenv": "^14.2.0",
 		"express": "^4.17.2",
+		"helmet": "^5.0.1",
 		"jsonwebtoken": "^8.5.1",
 		"mongoose": "^6.1.5"
 	},

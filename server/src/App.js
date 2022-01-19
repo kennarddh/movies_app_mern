@@ -1,8 +1,11 @@
 import 'dotenv/config'
 
 import express from 'express'
+
 import cors from 'cors'
 import bodyParser from 'body-parser'
+import compression from 'compression'
+import helmet from 'helmet'
 
 import db from './Database'
 import MovieRouter from './Routes/Movie'
@@ -10,9 +13,13 @@ import AuthenticationRouter from './Routes/Authentication'
 import NoMatchRouter from './Routes/NoMatch'
 
 const app = express()
-const Port = process.env.PORT || 3000
+const PORT = process.env.PORT || 3000
 
 const urlencodedParser = bodyParser.urlencoded({ extended: false })
+
+app.use(compression())
+
+app.use(helmet())
 
 app.use(bodyParser.json(), urlencodedParser)
 
@@ -29,4 +36,4 @@ app.use('/api', AuthenticationRouter)
 
 app.use('*', NoMatchRouter)
 
-app.listen(Port, () => console.log(`Server running on port ${Port}`))
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
