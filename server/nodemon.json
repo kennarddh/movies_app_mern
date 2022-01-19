@@ -1,3 +1,4 @@
 {
-    "delay": 5000
+	"delay": 5000,
+	"ext": "js,json"
 }
