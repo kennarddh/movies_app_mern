@@ -1,6 +1,4 @@
-import mongoose from 'mongoose'
-
-const { Schema } = mongoose
+import mongoose, { Schema } from 'mongoose'
 
 const Movie = new Schema(
 	{

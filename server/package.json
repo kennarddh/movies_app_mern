@@ -1,25 +1,31 @@
 {
-	"name": "belajar_express",
+	"name": "server",
 	"version": "1.0.0",
 	"description": "",
-	"main": "index.js",
 	"scripts": {
 		"build": "babel ./src --out-dir ./build",
-		"start": "nodemon --exec npx babel-node ./index.js",
-		"lint": "eslint ."
+		"start": "node ./build/index.js",
+		"dev": "nodemon --exec npx babel-node src/app.js",
+		"lint": "eslint .",
+		"prettier": "prettier -w \"src/**/*.js\"",
+		"prettier-check": "prettier -c \"src/**/*.js\""
 	},
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
+		"bcrypt": "^5.0.1",
 		"body-parser": "^1.19.1",
 		"cors": "^2.8.5",
+		"dotenv": "^14.2.0",
 		"express": "^4.17.2",
+		"jsonwebtoken": "^8.5.1",
 		"mongoose": "^6.1.5"
 	},
 	"devDependencies": {
 		"@babel/cli": "^7.16.8",
 		"@babel/core": "^7.16.7",
 		"@babel/node": "^7.16.8",
+		"@babel/plugin-transform-runtime": "^7.16.8",
 		"@babel/preset-env": "^7.16.8",
 		"@babel/runtime": "^7.16.7",
 		"eslint": "^8.7.0",
