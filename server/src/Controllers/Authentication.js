@@ -88,8 +88,6 @@ export const Login = async (req, res) => {
 					const payload = {
 						id: user._id,
 						username: user.username,
-						name: user.name,
-						email: user.email,
 					}
 
 					jwt.sign(
