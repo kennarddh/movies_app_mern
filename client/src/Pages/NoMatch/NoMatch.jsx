@@ -1,21 +1,44 @@
 import React from 'react'
 
-// component
-import Navbar from '../../Components/Navbar/Navbar'
+import styled from 'styled-components'
 
-//styling
-import './NoMatch.css'
+const NoMatchContainer = styled.div`
+	position: absolute;
+	inset: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+`
+
+const NoMatchBody = styled.div`
+	width: 450px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+`
+
+const NoMatchH1 = styled.h1`
+	border-right: 1px solid black;
+	display: inline-block;
+	padding: 10px 30px;
+	color: black;
+`
+const NoMatchP = styled.p`
+	display: inline-block;
+	padding: 10px 30px;
+	color: black;
+`
 
 const NoMatch = () => {
 	return (
 		<>
-			<Navbar />
-			<div className='no-match'>
-				<div className='body'>
-					<h1>404</h1>
-					<p>This page could not be found.</p>
-				</div>
-			</div>
+			<NoMatchContainer>
+				<NoMatchBody>
+					<NoMatchH1>404</NoMatchH1>
+					<NoMatchP>This page could not be found.</NoMatchP>
+				</NoMatchBody>
+			</NoMatchContainer>
 		</>
 	)
 }

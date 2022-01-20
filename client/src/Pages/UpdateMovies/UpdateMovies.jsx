@@ -2,15 +2,30 @@ import React, { useEffect, useState } from 'react'
 
 import { useParams } from 'react-router-dom'
 
+import styled from 'styled-components'
+
 // components
-import Title from '../../Components/Title/Title'
-import CustomInput from '../../Components/CustomInput/CustomInput'
+import Title from '../../Components/StyledComponents/Title'
+import CustomInput from '../../Components/StyledComponents/CustomInput'
+import CustomForm from '../../Components/StyledComponents/CustomForm'
 
 // utils
 import { UpdateMovieById, GetMovieById } from '../../Utils/Api'
 
-// styling
-import './UpdateMovies.css'
+const UpdateMoviesContainer = styled.div`
+	width: 100%;
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+`
+
+const UpdateMoviesFormWrapper = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	gap: 30px;
+`
 
 const UpdateMovies = () => {
 	const { id } = useParams()
@@ -53,49 +68,42 @@ const UpdateMovies = () => {
 
 	return (
 		<>
-			<div className='update-movies-container'>
+			<UpdateMoviesContainer>
 				<Title title='Update Movies' />
-				<div className='form-wrapper'>
-					<div className='form'>
-						<div className='input'>
-							<CustomInput
-								id='name'
-								placeholder='Name'
-								label='Name'
-								type='text'
-								value={Name}
-								onChange={value => SetName(value)}
-							/>
-							<CustomInput
-								id='time'
-								placeholder='Time'
-								label='Time'
-								type='text'
-								value={Time}
-								onChange={value => SetTime(value)}
-							/>
-							<CustomInput
-								id='rating'
-								placeholder='Rating'
-								label='Rating'
-								type='number'
-								value={Rating}
-								onChange={value =>
-									SetRating(parseFloat(value).toFixed(1))
-								}
-								step='0.1'
-								max='10'
-								min='0'
-							/>
-						</div>
-						<div className='button-wrapper'>
-							<button className='create-button' onClick={Update}>
-								Update
-							</button>
-						</div>
-					</div>
-				</div>
-			</div>
+				<UpdateMoviesFormWrapper>
+					<CustomForm buttonTitle='Update' onSubmit={Update}>
+						<CustomInput
+							id='name'
+							placeholder='Name'
+							label='Name'
+							type='text'
+							value={Name}
+							onChange={value => SetName(value)}
+						/>
+						<CustomInput
+							id='time'
+							placeholder='Time'
+							label='Time'
+							type='text'
+							value={Time}
+							onChange={value => SetTime(value)}
+						/>
+						<CustomInput
+							id='rating'
+							placeholder='Rating'
+							label='Rating'
+							type='number'
+							value={Rating}
+							onChange={value =>
+								SetRating(parseFloat(value).toFixed(1))
+							}
+							step='0.1'
+							max='10'
+							min='0'
+						/>
+					</CustomForm>
+				</UpdateMoviesFormWrapper>
+			</UpdateMoviesContainer>
 		</>
 	)
 }
