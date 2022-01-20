@@ -112,12 +112,21 @@ export const Login = async (req, res) => {
 		})
 }
 
-export const GetUsername = (req, res) => {
+export const GetUserData = (req, res) => {
 	return res.status(200).json({
 		success: true,
 		isLoggedIn: true,
 		data: {
 			username: req.user.username,
+			name: req.user.name,
+			email: req.user.email,
 		},
+	})
+}
+
+export const IsUserLoggedIn = (req, res) => {
+	return res.status(200).json({
+		success: true,
+		isLoggedIn: true,
 	})
 }
