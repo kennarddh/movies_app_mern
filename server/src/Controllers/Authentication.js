@@ -64,7 +64,7 @@ export const Login = async (req, res) => {
 	}
 
 	await User.findOne({
-		username: body.username.toLowerCase(),
+		email: body.email.toLowerCase(),
 	})
 		.exec()
 		.then(user => {
