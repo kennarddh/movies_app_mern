@@ -43,7 +43,11 @@ export const UpdateMovie = async (req, res) => {
 	await Movie.findOne({ _id: req.params.id })
 		.exec()
 		.then(async movie => {
-			const newMovie = new Movie(body)
+			const newMovie = movie
+
+			newMovie.name = body.name
+			newMovie.time = body.time
+			newMovie.rating = body.rating
 
 			await newMovie
 				.save()
