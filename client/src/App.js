@@ -35,9 +35,7 @@ const App = () => {
 					<Routes>
 						<Route path='/' element={<Layout />}>
 							{/* Movies */}
-							<Route path='movies'>
-								<Route index element={<Movies />} />
-							</Route>
+							<Route path='movies' element={<Movies />} />
 
 							{/* Auth */}
 							<Route path='auth'>
