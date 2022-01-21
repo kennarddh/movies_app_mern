@@ -6,7 +6,7 @@ import {
 	UpdateMovie,
 	DeleteMovie,
 	GetMovieById,
-	GetMovies,
+	GetMovies,GetMoviesByAuthor,
 } from '../Controllers/Movie'
 
 // Middleware
@@ -19,5 +19,6 @@ Router.put('/movie/:id', VerifyJWT, UpdateMovie)
 Router.delete('/movie/:id', VerifyJWT, DeleteMovie)
 Router.get('/movie/:id', GetMovieById)
 Router.get('/movies', GetMovies)
+Router.get('/movie/author/:author_id', GetMoviesByAuthor)
 
 export default Router

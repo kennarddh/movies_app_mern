@@ -5,6 +5,7 @@ const Movie = new Schema(
 		name: { type: String, required: true },
 		time: { type: [String], required: true },
 		rating: { type: Number, required: true },
+		author: { type: Schema.Types.ObjectId, ref: 'user' },
 	},
 	{ timestamps: true }
 )

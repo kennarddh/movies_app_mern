@@ -117,3 +117,18 @@ export const GetMovies = async (req, res) => {
 		})
 		.catch(err => res.status(400).json({ success: false, error: err }))
 }
+
+export const GetMoviesByAuthor = async (req, res) => {
+	await Movie.find({ author: req.params.author_id })
+		.exec()
+		.then(movies => {
+			if (!movies.length) {
+				return res
+					.status(404)
+					.json({ success: false, error: `Movie not found` })
+			}
+
+			return res.status(200).json({ success: true, data: movies })
+		})
+		.catch(err => res.status(400).json({ success: false, error: err }))
+}
