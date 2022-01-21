@@ -5,10 +5,10 @@ import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
 // components
-import Title from '../../Components/StyledComponents/Title'
+import Title from '../../../Components/StyledComponents/Title'
 
 // utils
-import { GetAllMovies, DeleteMovieById } from '../../Utils/Api'
+import { GetAllMovies, DeleteMovieById } from '../../../Utils/Api'
 
 const MoviesContainer = styled.div`
 	width: 100%;
@@ -70,15 +70,20 @@ const Movies = () => {
 	const [Movies, SetMovies] = useState([])
 
 	useEffect(() => {
+		let isMounted = true
 		const AsyncGetAllMovies = async () => {
 			await GetAllMovies()
 				.then(response => {
-					SetMovies(response.data.data)
+					if (isMounted) SetMovies(response.data.data)
 				})
 				.catch(err => console.log(err))
 		}
 
 		AsyncGetAllMovies()
+
+		return () => {
+			isMounted = false
+		}
 	}, [])
 
 	const Delete = id => {

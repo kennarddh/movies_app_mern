@@ -5,36 +5,68 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Layout from './Components/Layout/Layout'
 
 // Pages
-import Movies from './Pages/Movies/Movies'
-import UpdateMovies from './Pages/UpdateMovies/UpdateMovies'
-import CreateMovies from './Pages/CreateMovies/CreateMovies'
+
+// Movies
+import AdminMovies from './Pages/Admin/Movies/Movies'
+import AdminUpdateMovies from './Pages/Admin/UpdateMovies/UpdateMovies'
+import AdminCreateMovies from './Pages/Admin/CreateMovies/CreateMovies'
+
+// Auth
+import AuthLogin from './Pages/Auth/Login/Login'
+import AuthRegister from './Pages/Auth/Register/Register'
 
 // 404
 import NoMatch from './Pages/NoMatch/NoMatch'
 
+// Route
+import ProtectedRoute from './Components/ProtectedRoute/ProtectedRoute'
+
+// Contexts
+import { AuthProvider } from './Contexts/Auth'
+
 const App = () => {
 	return (
 		<>
-			<Router>
-				<Routes>
-					<Route path='/' element={<Layout />}>
-						{/* Movies */}
-						<Route path='movies'>
-							{/* Index */}
-							<Route index element={<Movies />} />
+			<AuthProvider>
+				<Router>
+					<Routes>
+						<Route path='/' element={<Layout />}>
+							{/* Auth */}
+							<Route path='auth'>
+								{/* Login */}
+								<Route path='Login' element={<AuthLogin />} />
 
-							{/* Create */}
-							<Route path='create' element={<CreateMovies />} />
+								{/* Register */}
+								<Route path='Register' element={<AuthRegister />} />
+							</Route>
 
-							{/* Edit */}
-							<Route path='update/:id' element={<UpdateMovies />} />
+							{/* Admin */}
+							<Route path='admin' element={<ProtectedRoute />}>
+								{/* Movies */}
+								<Route path='movies'>
+									{/* Index */}
+									<Route index element={<AdminMovies />} />
+
+									{/* Create */}
+									<Route
+										path='create'
+										element={<AdminCreateMovies />}
+									/>
+
+									{/* Edit */}
+									<Route
+										path='update/:id'
+										element={<AdminUpdateMovies />}
+									/>
+								</Route>
+							</Route>
+
+							{/* 404 */}
+							<Route path='*' element={<NoMatch />} />
 						</Route>
-
-						{/* 404 */}
-						<Route path='*' element={<NoMatch />} />
-					</Route>
-				</Routes>
-			</Router>
+					</Routes>
+				</Router>
+			</AuthProvider>
 		</>
 	)
 }

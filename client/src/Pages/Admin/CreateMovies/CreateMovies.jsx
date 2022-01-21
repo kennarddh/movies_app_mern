@@ -1,25 +1,23 @@
-import React, { useEffect, useState } from 'react'
-
-import { useParams } from 'react-router-dom'
+import React, { useState } from 'react'
 
 import styled from 'styled-components'
 
 // components
-import Title from '../../Components/StyledComponents/Title'
-import CustomInput from '../../Components/StyledComponents/CustomInput'
-import CustomForm from '../../Components/StyledComponents/CustomForm'
+import Title from '../../../Components/StyledComponents/Title'
+import CustomInput from '../../../Components/StyledComponents/CustomInput'
+import CustomForm from '../../../Components/StyledComponents/CustomForm'
 
 // utils
-import { UpdateMovieById, GetMovieById } from '../../Utils/Api'
+import { InsertMovie } from '../../../Utils/Api'
 
-const UpdateMoviesContainer = styled.div`
+const CreateMoviesContainer = styled.div`
 	width: 100%;
 	height: 100vh;
 	display: flex;
 	flex-direction: column;
 `
 
-const UpdateMoviesFormWrapper = styled.div`
+const CreateMoviesFormWrapper = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -27,37 +25,19 @@ const UpdateMoviesFormWrapper = styled.div`
 	gap: 30px;
 `
 
-const UpdateMovies = () => {
-	const { id } = useParams()
-
+const CreateMovies = () => {
 	const [Name, SetName] = useState('')
 	const [Time, SetTime] = useState('')
 	const [Rating, SetRating] = useState(0)
 
-	useEffect(() => {
-		const AsyncGetMovie = () => {
-			GetMovieById(id)
-				.then(response => {
-					const movie = response.data.data
-
-					SetName(movie.name)
-					SetTime(movie.time.join(', '))
-					SetRating(movie.rating)
-				})
-				.catch(() => alert("Movies don't exist"))
-		}
-
-		AsyncGetMovie()
-	}, [id])
-
-	const Update = async () => {
-		await UpdateMovieById(id, {
+	const Create = () => {
+		InsertMovie({
 			name: Name,
 			time: Time.split(',').map(item => item.trim()),
 			rating: Rating,
 		})
 			.then(() => {
-				alert('Movie updated successfully')
+				alert('Movie created successfully')
 			})
 			.catch(error => console.log(error))
 
@@ -68,10 +48,10 @@ const UpdateMovies = () => {
 
 	return (
 		<>
-			<UpdateMoviesContainer>
-				<Title title='Update Movies' />
-				<UpdateMoviesFormWrapper>
-					<CustomForm buttonTitle='Update' onSubmit={Update}>
+			<CreateMoviesContainer>
+				<Title title='Create Movies' />
+				<CreateMoviesFormWrapper>
+					<CustomForm buttonTitle='Create' onSubmit={Create}>
 						<CustomInput
 							id='name'
 							placeholder='Name'
@@ -102,10 +82,10 @@ const UpdateMovies = () => {
 							min='0'
 						/>
 					</CustomForm>
-				</UpdateMoviesFormWrapper>
-			</UpdateMoviesContainer>
+				</CreateMoviesFormWrapper>
+			</CreateMoviesContainer>
 		</>
 	)
 }
 
-export default UpdateMovies
+export default CreateMovies
