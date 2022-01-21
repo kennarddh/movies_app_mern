@@ -14,6 +14,7 @@ const NavbarWrapper = styled.nav`
 	position: fixed;
 	top: 0;
 	right: 0;
+	left: -20px;
 	padding: 20px 20px;
 	width: 100%;
 	background-color: #23b574;
@@ -100,6 +101,7 @@ const Navbar = () => {
 				) : (
 					<>
 						{/* Public */}
+						<NavbarItem to='/movies'>Movies</NavbarItem>
 						<NavbarItem to='/auth/login'>Login</NavbarItem>
 						<NavbarItem to='/auth/register'>Register</NavbarItem>
 					</>

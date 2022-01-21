@@ -7,6 +7,9 @@ import Layout from './Components/Layout/Layout'
 // Pages
 
 // Movies
+import Movies from './Pages/Movies/Movies'
+
+// Admin Movies
 import AdminMovies from './Pages/Admin/Movies/Movies'
 import AdminUpdateMovies from './Pages/Admin/UpdateMovies/UpdateMovies'
 import AdminCreateMovies from './Pages/Admin/CreateMovies/CreateMovies'
@@ -31,13 +34,21 @@ const App = () => {
 				<Router>
 					<Routes>
 						<Route path='/' element={<Layout />}>
+							{/* Movies */}
+							<Route path='movies'>
+								<Route index element={<Movies />} />
+							</Route>
+
 							{/* Auth */}
 							<Route path='auth'>
 								{/* Login */}
-								<Route path='Login' element={<AuthLogin />} />
+								<Route path='login' element={<AuthLogin />} />
 
 								{/* Register */}
-								<Route path='Register' element={<AuthRegister />} />
+								<Route
+									path='register'
+									element={<AuthRegister />}
+								/>
 							</Route>
 
 							{/* Admin */}
