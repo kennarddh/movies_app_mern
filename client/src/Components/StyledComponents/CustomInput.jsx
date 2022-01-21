@@ -20,7 +20,7 @@ const CustomInput = ({ value, onChange, type, id, label, ...inputProps }) => {
 	return (
 		<>
 			<CustomInputContainer>
-				<label className='custom-input-label' htmlFor={id}>
+				<label htmlFor={id}>
 					{label}
 				</label>
 				<CustomInputInput

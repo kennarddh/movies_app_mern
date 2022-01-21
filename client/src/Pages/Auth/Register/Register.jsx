@@ -42,7 +42,7 @@ const Register = () => {
 
 	useEffect(() => {
 		if (IsLoggedIn) Navigate('/admin')
-	})
+	}, [IsLoggedIn, Navigate])
 
 	const Register = async () => {
 		await AuthRegister({

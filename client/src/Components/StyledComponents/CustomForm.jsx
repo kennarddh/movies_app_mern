@@ -26,16 +26,20 @@ const FormButton = styled.button`
 `
 
 const CustomForm = props => {
+	const OnSubmit = (event) => {
+		event.preventDefault()
+
+		props.onSubmit()
+	}
+
 	return (
 		<>
-			<div className='form'>
+			<form onSubmit={OnSubmit}>
 				<FormInputWrapper>{props.children}</FormInputWrapper>
 				<FormButtonWrapper>
-					<FormButton onClick={props.onSubmit}>
-						{props.buttonTitle}
-					</FormButton>
+					<FormButton type='submit'>{props.buttonTitle}</FormButton>
 				</FormButtonWrapper>
-			</div>
+			</form>
 		</>
 	)
 }

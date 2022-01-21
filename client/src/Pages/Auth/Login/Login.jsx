@@ -31,7 +31,7 @@ const LoginFormWrapper = styled.div`
 `
 
 const Login = () => {
-	const { SetIsLoggedIn, isLoggedIn } = AuthConsumer()
+	const { SetIsLoggedIn, IsLoggedIn } = AuthConsumer()
 
 	const [Email, SetEmail] = useState('')
 	const [Password, SetPassword] = useState('')
@@ -39,8 +39,8 @@ const Login = () => {
 	const Navigate = useNavigate()
 
 	useEffect(() => {
-		if (isLoggedIn) Navigate('/admin')
-	})
+		if (IsLoggedIn) Navigate('/admin')
+	}, [IsLoggedIn, Navigate])
 
 	const Login = async () => {
 		await AuthLogin({
