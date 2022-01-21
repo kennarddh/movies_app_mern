@@ -8,7 +8,11 @@ import styled from 'styled-components'
 import Title from '../../../Components/StyledComponents/Title'
 
 // utils
-import { GetAllMovies, DeleteMovieById } from '../../../Utils/Api'
+import {
+	GetMoviesByAuthor,
+	DeleteMovieById,
+	AuthUserData,
+} from '../../../Utils/Api'
 
 const MoviesContainer = styled.div`
 	width: 100%;
@@ -71,15 +75,25 @@ const Movies = () => {
 
 	useEffect(() => {
 		let isMounted = true
-		const AsyncGetAllMovies = async () => {
-			await GetAllMovies()
-				.then(response => {
-					if (isMounted) SetMovies(response.data.data)
+
+		const token = window.localStorage.getItem('token')
+
+		const AsyncGetMoviesByAuthor = async () => {
+			await AuthUserData(token)
+				.then(response => response.data)
+				.then(data => data.data)
+				.then(async user => {
+					await GetMoviesByAuthor(user.id)
+						.then(response => response.data)
+						.then(data => data.data)
+						.then(movies => {
+							if (isMounted) SetMovies(movies)
+						})
+						.catch(error => console.log(error))
 				})
-				.catch(err => console.log(err))
 		}
 
-		AsyncGetAllMovies()
+		AsyncGetMoviesByAuthor()
 
 		return () => {
 			isMounted = false
@@ -92,16 +106,26 @@ const Movies = () => {
 		if (!confirm) return
 
 		const AsyncDelete = async () => {
-			await DeleteMovieById(id)
+			const token = window.localStorage.getItem('token')
+
+			await DeleteMovieById(id, token)
 				.then(async () => {
-					await GetAllMovies()
-						.then(response => {
-							SetMovies(response.data.data)
+					await AuthUserData(token)
+						.then(response => response.data)
+						.then(data => data.data)
+						.then(async user => {
+							await GetMoviesByAuthor(user.id)
+								.then(response => response.data)
+								.then(data => data.data)
+								.then(movies => {
+									SetMovies(movies)
+								})
+								.catch(error => console.log(error))
 						})
-						.catch(err => console.log(err))
 				})
-				.catch(err => console.log(err))
+				.catch(error => console.log(error))
 		}
+
 		AsyncDelete()
 	}
 

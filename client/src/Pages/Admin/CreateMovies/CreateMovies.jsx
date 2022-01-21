@@ -31,11 +31,16 @@ const CreateMovies = () => {
 	const [Rating, SetRating] = useState(0)
 
 	const Create = () => {
-		InsertMovie({
-			name: Name,
-			time: Time.split(',').map(item => item.trim()),
-			rating: Rating,
-		})
+		const token = window.localStorage.getItem('token')
+
+		InsertMovie(
+			{
+				name: Name,
+				time: Time.split(',').map(item => item.trim()),
+				rating: parseFloat(Rating).toFixed(1),
+			},
+			token
+		)
 			.then(() => {
 				alert('Movie created successfully')
 			})
@@ -74,9 +79,10 @@ const CreateMovies = () => {
 							label='Rating'
 							type='number'
 							value={Rating}
-							onChange={value =>
-								SetRating(parseFloat(value).toFixed(1))
-							}
+							onChange={value => SetRating(value)}
+							onBlur={() => {
+								SetRating(parseFloat(Rating).toFixed(1))
+							}}
 							step='0.1'
 							max='10'
 							min='0'

@@ -115,9 +115,8 @@ export const GetUserData = (req, res) => {
 		success: true,
 		isLoggedIn: true,
 		data: {
+			id: req.user.id,
 			username: req.user.username,
-			name: req.user.name,
-			email: req.user.email,
 		},
 	})
 }

@@ -11,6 +11,8 @@ export const CreateMovie = async (req, res) => {
 		})
 	}
 
+	body.author = req.user.id
+
 	const movie = new Movie(body)
 
 	await movie
@@ -24,6 +26,7 @@ export const CreateMovie = async (req, res) => {
 		})
 		.catch(error => {
 			return res.status(400).json({
+				success: false,
 				error,
 				message: 'Movie not created!',
 			})
@@ -60,14 +63,16 @@ export const UpdateMovie = async (req, res) => {
 				})
 				.catch(error => {
 					return res.status(404).json({
+						success: false,
 						error,
 						message: 'Movie not updated!',
 					})
 				})
 		})
-		.catch(err => {
+		.catch(error => {
 			return res.status(404).json({
-				err,
+				success: false,
+				error,
 				message: 'Movie not found!',
 			})
 		})
@@ -85,7 +90,7 @@ export const DeleteMovie = async (req, res) => {
 
 			return res.status(200).json({ success: true, data: movie })
 		})
-		.catch(err => res.status(400).json({ success: false, error: err }))
+		.catch(error => res.status(400).json({ success: false, error }))
 }
 
 export const GetMovieById = async (req, res) => {
@@ -100,7 +105,7 @@ export const GetMovieById = async (req, res) => {
 
 			return res.status(200).json({ success: true, data: movie })
 		})
-		.catch(err => res.status(400).json({ success: false, error: err }))
+		.catch(error => res.status(400).json({ success: false, error }))
 }
 
 export const GetMovies = async (req, res) => {
@@ -115,7 +120,7 @@ export const GetMovies = async (req, res) => {
 
 			return res.status(200).json({ success: true, data: movies })
 		})
-		.catch(err => res.status(400).json({ success: false, error: err }))
+		.catch(error => res.status(400).json({ success: false, error }))
 }
 
 export const GetMoviesByAuthor = async (req, res) => {
@@ -130,5 +135,5 @@ export const GetMoviesByAuthor = async (req, res) => {
 
 			return res.status(200).json({ success: true, data: movies })
 		})
-		.catch(err => res.status(400).json({ success: false, error: err }))
+		.catch(error => res.status(400).json({ success: false, error }))
 }

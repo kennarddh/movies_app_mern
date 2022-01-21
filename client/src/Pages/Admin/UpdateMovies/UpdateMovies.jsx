@@ -35,27 +35,41 @@ const UpdateMovies = () => {
 	const [Rating, SetRating] = useState(0)
 
 	useEffect(() => {
+		let isMounted = true
+
 		const AsyncGetMovie = () => {
 			GetMovieById(id)
 				.then(response => {
 					const movie = response.data.data
 
-					SetName(movie.name)
-					SetTime(movie.time.join(', '))
-					SetRating(movie.rating)
+					if (isMounted) {
+						SetName(movie.name)
+						SetTime(movie.time.join(', '))
+						SetRating(movie.rating)
+					}
 				})
 				.catch(() => alert("Movies don't exist"))
 		}
 
 		AsyncGetMovie()
+
+		return () => {
+			isMounted = false
+		}
 	}, [id])
 
 	const Update = async () => {
-		await UpdateMovieById(id, {
-			name: Name,
-			time: Time.split(',').map(item => item.trim()),
-			rating: Rating,
-		})
+		const token = window.localStorage.getItem('token')
+
+		await UpdateMovieById(
+			id,
+			{
+				name: Name,
+				time: Time.split(',').map(item => item.trim()),
+				rating: parseFloat(Rating).toFixed(1),
+			},
+			token
+		)
 			.then(() => {
 				alert('Movie updated successfully')
 			})
@@ -94,9 +108,10 @@ const UpdateMovies = () => {
 							label='Rating'
 							type='number'
 							value={Rating}
-							onChange={value =>
-								SetRating(parseFloat(value).toFixed(1))
-							}
+							onChange={value => SetRating(value)}
+							onBlur={() => {
+								SetRating(parseFloat(Rating).toFixed(1))
+							}}
 							step='0.1'
 							max='10'
 							min='0'
