@@ -3,7 +3,7 @@ import React from 'react'
 import { Outlet } from 'react-router-dom'
 
 // components
-import Navbar from '../StyledComponents/Navbar'
+import Navbar from 'Components/StyledComponents/Navbar'
 
 const Layout = () => {
 	return (

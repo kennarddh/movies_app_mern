@@ -3,11 +3,11 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 // Components
-import Title from '../../Components/StyledComponents/Title'
-import MoviesCard from '../../Components/StyledComponents/MoviesCard'
+import Title from 'Components/StyledComponents/Title'
+import MoviesCard from 'Components/StyledComponents/MoviesCard'
 
 // Utils
-import { GetAllMovies } from '../../Utils/Api'
+import { GetAllMovies } from 'Utils/Api'
 
 const MoviesContainer = styled.div`
 	display: flex;

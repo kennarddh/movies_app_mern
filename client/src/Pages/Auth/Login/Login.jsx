@@ -5,15 +5,15 @@ import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom'
 
 // components
-import Title from '../../../Components/StyledComponents/Title'
-import CustomInput from '../../../Components/StyledComponents/CustomInput'
-import CustomForm from '../../../Components/StyledComponents/CustomForm'
+import Title from 'Components/StyledComponents/Title'
+import CustomInput from 'Components/StyledComponents/CustomInput'
+import CustomForm from 'Components/StyledComponents/CustomForm'
 
 // utils
-import { AuthLogin } from '../../../Utils/Api'
+import { AuthLogin } from 'Utils/Api'
 
 // Contexts
-import AuthConsumer from '../../../Contexts/Auth'
+import AuthConsumer from 'Contexts/Auth'
 
 const LoginContainer = styled.div`
 	width: 100%;

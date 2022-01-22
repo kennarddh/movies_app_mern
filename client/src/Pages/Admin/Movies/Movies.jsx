@@ -5,14 +5,14 @@ import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
 // components
-import Title from '../../../Components/StyledComponents/Title'
+import Title from 'Components/StyledComponents/Title'
 
 // utils
 import {
 	GetMoviesByAuthor,
 	DeleteMovieById,
 	AuthUserData,
-} from '../../../Utils/Api'
+} from 'Utils/Api'
 
 const MoviesContainer = styled.div`
 	width: 100%;

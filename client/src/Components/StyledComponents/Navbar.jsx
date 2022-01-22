@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 // Contexts
-import AuthConsumer from '../../Contexts/Auth'
+import AuthConsumer from 'Contexts/Auth'
 
 const NavbarWrapper = styled.nav`
 	display: flex;

@@ -3,12 +3,12 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 
 // components
-import Title from '../../../Components/StyledComponents/Title'
-import CustomInput from '../../../Components/StyledComponents/CustomInput'
-import CustomForm from '../../../Components/StyledComponents/CustomForm'
+import Title from 'Components/StyledComponents/Title'
+import CustomInput from 'Components/StyledComponents/CustomInput'
+import CustomForm from 'Components/StyledComponents/CustomForm'
 
 // utils
-import { InsertMovie } from '../../../Utils/Api'
+import { InsertMovie } from 'Utils/Api'
 
 const CreateMoviesContainer = styled.div`
 	width: 100%;

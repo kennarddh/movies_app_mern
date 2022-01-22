@@ -5,12 +5,12 @@ import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
 // components
-import Title from '../../../Components/StyledComponents/Title'
-import CustomInput from '../../../Components/StyledComponents/CustomInput'
-import CustomForm from '../../../Components/StyledComponents/CustomForm'
+import Title from 'Components/StyledComponents/Title'
+import CustomInput from 'Components/StyledComponents/CustomInput'
+import CustomForm from 'Components/StyledComponents/CustomForm'
 
 // utils
-import { UpdateMovieById, GetMovieById } from '../../../Utils/Api'
+import { UpdateMovieById, GetMovieById } from 'Utils/Api'
 
 const UpdateMoviesContainer = styled.div`
 	width: 100%;

@@ -3,7 +3,7 @@ import React from 'react'
 import { Navigate, Outlet } from 'react-router-dom'
 
 // Contexts
-import AuthConsumer from '../../Contexts/Auth'
+import AuthConsumer from 'Contexts/Auth'
 
 const ProtectedRoute = () => {
 	const { IsLoggedIn } = AuthConsumer()

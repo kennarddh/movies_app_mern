@@ -1,6 +1,6 @@
 import React, { useState, useEffect, createContext, useContext } from 'react'
 
-import { AuthCheckLoggedIn } from '../Utils/Api'
+import { AuthCheckLoggedIn } from 'Utils/Api'
 
 export const AuthContext = createContext({})
 
