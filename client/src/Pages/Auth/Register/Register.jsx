@@ -70,7 +70,7 @@ const Register = () => {
 							label='Username'
 							type='text'
 							value={Username}
-							onChange={value => SetUsername(value)}
+							onChange={event => SetUsername(event.target.value)}
 						/>
 						<CustomInput
 							id='name'
@@ -78,7 +78,7 @@ const Register = () => {
 							label='Name'
 							type='text'
 							value={Name}
-							onChange={value => SetName(value)}
+							onChange={event => SetName(event.target.value)}
 						/>
 						<CustomInput
 							id='email'
@@ -86,7 +86,7 @@ const Register = () => {
 							label='Email'
 							type='text'
 							value={Email}
-							onChange={value => SetEmail(value)}
+							onChange={event => SetEmail(event.target.value)}
 						/>
 						<CustomInput
 							id='password'
@@ -94,7 +94,7 @@ const Register = () => {
 							label='Password'
 							type='password'
 							value={Password}
-							onChange={value => SetPassword(value)}
+							onChange={event => SetPassword(event.target.value)}
 						/>
 					</CustomForm>
 				</RegisterFormWrapper>

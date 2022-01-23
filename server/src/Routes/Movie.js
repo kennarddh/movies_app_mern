@@ -14,10 +14,17 @@ import {
 import VerifyJWT from '../Middleware/VerifyJWT'
 import VerifyMoviesAuthor from '../Middleware/VerifyMoviesAuthor'
 
+// Utils
+import Upload from '../Utils/Multer/Upload'
+
 const Router = express.Router()
 
-Router.post('/movie', VerifyJWT, CreateMovie)
-Router.put('/movie/:id', [VerifyJWT, VerifyMoviesAuthor], UpdateMovie)
+Router.post('/movie', [VerifyJWT, Upload.single('image')], CreateMovie)
+Router.put(
+	'/movie/:id',
+	[VerifyJWT, VerifyMoviesAuthor, Upload.single('image')],
+	UpdateMovie
+)
 Router.delete('/movie/:id', [VerifyJWT, VerifyMoviesAuthor], DeleteMovie)
 Router.get('/movie/:id', GetMovieById)
 Router.get('/movies', GetMovies)

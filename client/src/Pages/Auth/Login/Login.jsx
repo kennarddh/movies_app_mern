@@ -70,7 +70,7 @@ const Login = () => {
 							label='Email'
 							type='text'
 							value={Email}
-							onChange={value => SetEmail(value)}
+							onChange={event => SetEmail(event.target.value)}
 						/>
 						<CustomInput
 							id='password'
@@ -78,7 +78,7 @@ const Login = () => {
 							label='Password'
 							type='password'
 							value={Password}
-							onChange={value => SetPassword(value)}
+							onChange={event => SetPassword(event.target.value)}
 						/>
 					</CustomForm>
 				</LoginFormWrapper>

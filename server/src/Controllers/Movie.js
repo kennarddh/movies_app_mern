@@ -1,8 +1,13 @@
+import { Types } from 'mongoose'
+
+// Utils
+import AsyncUnlink from '../Utils/AsyncUnlink'
+
 // Models
 import Movie from '../Models/Movie'
 
 export const CreateMovie = async (req, res) => {
-	const { body } = req
+	const { body, file } = req
 
 	if (!body) {
 		return res.status(400).json({
@@ -12,6 +17,7 @@ export const CreateMovie = async (req, res) => {
 	}
 
 	body.author = req.user.id
+	body.image = file.filename
 
 	const movie = new Movie(body)
 
@@ -34,7 +40,7 @@ export const CreateMovie = async (req, res) => {
 }
 
 export const UpdateMovie = async (req, res) => {
-	const { body } = req
+	const { body, file } = req
 
 	if (!body) {
 		return res.status(400).json({
@@ -43,14 +49,18 @@ export const UpdateMovie = async (req, res) => {
 		})
 	}
 
-	await Movie.findOne({ _id: req.params.id })
+	await Movie.findById(req.params.id)
 		.exec()
 		.then(async movie => {
+			if (file) await AsyncUnlink(`uploads/movies/image/${movie.image}`)
+
 			const newMovie = movie
 
 			newMovie.name = body.name
 			newMovie.time = body.time
 			newMovie.rating = body.rating
+
+			if (file) newMovie.image = file.filename
 
 			await newMovie
 				.save()
@@ -69,17 +79,16 @@ export const UpdateMovie = async (req, res) => {
 					})
 				})
 		})
-		.catch(error => {
-			return res.status(404).json({
+		.catch(() => {
+			return res.status(400).json({
 				success: false,
-				error,
-				message: 'Movie not found!',
+				error: 'Movie not found!',
 			})
 		})
 }
 
 export const DeleteMovie = async (req, res) => {
-	await Movie.findOneAndDelete({ _id: req.params.id })
+	await Movie.findByIdAndDelete({ _id: req.params.id })
 		.exec()
 		.then(movie => {
 			if (!movie) {
@@ -94,7 +103,7 @@ export const DeleteMovie = async (req, res) => {
 }
 
 export const GetMovieById = async (req, res) => {
-	await Movie.findOne({ _id: req.params.id })
+	await Movie.findById(req.params.id)
 		.exec()
 		.then(movie => {
 			if (!movie) {

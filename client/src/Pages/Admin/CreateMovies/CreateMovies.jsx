@@ -9,6 +9,7 @@ import CustomForm from 'Components/StyledComponents/CustomForm'
 
 // utils
 import { InsertMovie } from 'Utils/Api'
+import Clamp from 'Utils/Clamp'
 
 const CreateMoviesContainer = styled.div`
 	width: 100%;
@@ -29,18 +30,22 @@ const CreateMovies = () => {
 	const [Name, SetName] = useState('')
 	const [Time, SetTime] = useState('')
 	const [Rating, SetRating] = useState(0)
+	const [Image, SetImage] = useState(null)
 
-	const Create = () => {
+	const Create = async () => {
 		const token = window.localStorage.getItem('token')
 
-		InsertMovie(
-			{
-				name: Name,
-				time: Time.split(',').map(item => item.trim()),
-				rating: parseFloat(Rating).toFixed(1),
-			},
-			token
+		const formData = new FormData()
+
+		formData.append('name', Name)
+		formData.append(
+			'time',
+			Time.split(',').map(item => item.trim())
 		)
+		formData.append('rating', parseFloat(Rating).toFixed(1))
+		formData.append('image', Image)
+
+		await InsertMovie(formData, token)
 			.then(() => {
 				alert('Movie created successfully')
 			})
@@ -49,6 +54,7 @@ const CreateMovies = () => {
 		SetName('')
 		SetTime('')
 		SetRating(0)
+		SetImage(0)
 	}
 
 	return (
@@ -56,14 +62,19 @@ const CreateMovies = () => {
 			<CreateMoviesContainer>
 				<Title title='Create Movies' />
 				<CreateMoviesFormWrapper>
-					<CustomForm buttonTitle='Create' onSubmit={Create}>
+					<CustomForm
+						buttonTitle='Create'
+						onSubmit={Create}
+						encType='multipart/form-data'
+					>
 						<CustomInput
 							id='name'
 							placeholder='Name'
 							label='Name'
 							type='text'
 							value={Name}
-							onChange={value => SetName(value)}
+							onChange={event => SetName(event.target.value)}
+							required
 						/>
 						<CustomInput
 							id='time'
@@ -71,7 +82,8 @@ const CreateMovies = () => {
 							label='Time'
 							type='text'
 							value={Time}
-							onChange={value => SetTime(value)}
+							onChange={event => SetTime(event.target.value)}
+							required
 						/>
 						<CustomInput
 							id='rating'
@@ -79,13 +91,25 @@ const CreateMovies = () => {
 							label='Rating'
 							type='number'
 							value={Rating}
-							onChange={value => SetRating(value)}
+							onChange={event => SetRating(event.target.value)}
 							onBlur={() => {
-								SetRating(parseFloat(Rating).toFixed(1))
+								SetRating(
+									Clamp(0, parseFloat(Rating).toFixed(1), 10)
+								)
 							}}
 							step='0.1'
 							max='10'
 							min='0'
+							required
+						/>
+						<CustomInput
+							id='image'
+							placeholder='Image'
+							label={Image ? Image.name : 'Image'}
+							type='file'
+							accept='.png, .jpg, .jpeg'
+							onChange={event => SetImage(event.target.files[0])}
+							required
 						/>
 					</CustomForm>
 				</CreateMoviesFormWrapper>

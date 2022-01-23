@@ -23,21 +23,22 @@ const FormButton = styled.button`
 	padding: 10px 20px;
 	border: none;
 	background-color: #23b574;
+	cursor: pointer;
 `
 
-const CustomForm = props => {
-	const OnSubmit = (event) => {
+const CustomForm = ({ children, buttonTitle, onSubmit, ...formProps }) => {
+	const OnSubmit = event => {
 		event.preventDefault()
 
-		props.onSubmit()
+		onSubmit()
 	}
 
 	return (
 		<>
-			<form onSubmit={OnSubmit}>
-				<FormInputWrapper>{props.children}</FormInputWrapper>
+			<form onSubmit={OnSubmit} {...formProps}>
+				<FormInputWrapper>{children}</FormInputWrapper>
 				<FormButtonWrapper>
-					<FormButton type='submit'>{props.buttonTitle}</FormButton>
+					<FormButton type='submit'>{buttonTitle}</FormButton>
 				</FormButtonWrapper>
 			</form>
 		</>
