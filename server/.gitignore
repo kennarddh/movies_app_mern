@@ -283,4 +283,5 @@ dist
 # build
 /build
 
-/uploads
+# uploads
+/public/uploads

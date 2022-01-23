@@ -6,7 +6,7 @@ import path from 'path'
 
 const storage = diskStorage({
 	destination: (req, file, cb) => {
-		cb(null, 'uploads/movies/image')
+		cb(null, 'public/uploads/movies/image')
 	},
 	filename: (req, file, cb) => {
 		cb(null, `${uuidV4()}${Date.now()}${path.extname(file.originalname)}`)
