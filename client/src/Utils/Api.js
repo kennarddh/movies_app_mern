@@ -1,8 +1,12 @@
 import axios from 'axios'
 
+export const UploadsUrl = 'http://localhost:3000/uploads/'
+export const ApiUrl = 'http://localhost:3000/api/'
+
 const api = axios.create({
-	baseURL: 'http://localhost:3000/api',
+	baseURL: ApiUrl,
 })
+
 
 export const InsertMovie = (payload, token) =>
 	api.post(`/movie`, payload, {

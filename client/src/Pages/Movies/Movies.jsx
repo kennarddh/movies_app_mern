@@ -59,6 +59,7 @@ const Movies = () => {
 								title={movie.name}
 								time={movie.time}
 								rating={movie.rating}
+								image={movie.image}
 							/>
 						</>
 					))}
