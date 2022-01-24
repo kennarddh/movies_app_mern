@@ -4,14 +4,17 @@ import { useParams } from 'react-router-dom'
 
 import styled from 'styled-components'
 
-// components
+// Components
 import Title from 'Components/StyledComponents/Title'
 import CustomInput from 'Components/StyledComponents/CustomInput'
 import CustomForm from 'Components/StyledComponents/CustomForm'
 
-// utils
-import { UpdateMovieById, GetMovieById } from 'Utils/Api'
+// Utils
+import { UpdateMovieById, GetMovieById, AuthCheckLoggedIn } from 'Utils/Api'
 import Clamp from 'Utils/Clamp'
+
+// Context
+import AuthConsumer from 'Contexts/Auth'
 
 const UpdateMoviesContainer = styled.div`
 	width: 100%;
@@ -29,6 +32,8 @@ const UpdateMoviesFormWrapper = styled.div`
 `
 
 const UpdateMovies = () => {
+	const { IsLoggedIn, SetIsLoggedIn } = AuthConsumer()
+
 	const { id } = useParams()
 
 	const [Name, SetName] = useState('')
@@ -39,8 +44,26 @@ const UpdateMovies = () => {
 	useEffect(() => {
 		let isMounted = true
 
-		const AsyncGetMovie = () => {
-			GetMovieById(id)
+		const AsyncAuthCheckLoggedIn = async () => {
+			const token = window.localStorage.getItem('token')
+
+			await AuthCheckLoggedIn(token).catch(error => {
+				if (!error.isLoggedIn && isMounted) SetIsLoggedIn(false)
+			})
+		}
+
+		AsyncAuthCheckLoggedIn()
+
+		return () => {
+			isMounted = false
+		}
+	}, [SetIsLoggedIn])
+
+	useEffect(() => {
+		let isMounted = true
+
+		const AsyncGetMovie = async () => {
+			await GetMovieById(id)
 				.then(response => {
 					const movie = response.data.data
 
@@ -61,6 +84,8 @@ const UpdateMovies = () => {
 	}, [id])
 
 	const Update = async () => {
+		if (!IsLoggedIn) return
+
 		const token = window.localStorage.getItem('token')
 
 		const formData = new FormData()

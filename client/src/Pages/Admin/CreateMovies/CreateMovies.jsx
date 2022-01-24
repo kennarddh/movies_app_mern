@@ -1,15 +1,18 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import styled from 'styled-components'
 
-// components
+// Components
 import Title from 'Components/StyledComponents/Title'
 import CustomInput from 'Components/StyledComponents/CustomInput'
 import CustomForm from 'Components/StyledComponents/CustomForm'
 
-// utils
-import { InsertMovie } from 'Utils/Api'
+// Utils
+import { InsertMovie, AuthCheckLoggedIn } from 'Utils/Api'
 import Clamp from 'Utils/Clamp'
+
+// Context
+import AuthConsumer from 'Contexts/Auth'
 
 const CreateMoviesContainer = styled.div`
 	width: 100%;
@@ -27,12 +30,34 @@ const CreateMoviesFormWrapper = styled.div`
 `
 
 const CreateMovies = () => {
+	const { IsLoggedIn, SetIsLoggedIn } = AuthConsumer()
+
 	const [Name, SetName] = useState('')
 	const [Time, SetTime] = useState('')
 	const [Rating, SetRating] = useState(0)
 	const [Image, SetImage] = useState(null)
 
+	useEffect(() => {
+		let isMounted = true
+
+		const AsyncAuthCheckLoggedIn = async () => {
+			const token = window.localStorage.getItem('token')
+			
+			await AuthCheckLoggedIn(token).catch(error => {
+				if (!error.isLoggedIn && isMounted) SetIsLoggedIn(false)
+			})
+		}
+
+		AsyncAuthCheckLoggedIn()
+
+		return () => {
+			isMounted = false
+		}
+	}, [SetIsLoggedIn])
+
 	const Create = async () => {
+		if (!IsLoggedIn) return
+
 		const token = window.localStorage.getItem('token')
 
 		const formData = new FormData()
@@ -45,11 +70,15 @@ const CreateMovies = () => {
 		formData.append('rating', parseFloat(Rating).toFixed(1))
 		formData.append('image', Image)
 
-		await InsertMovie(formData, token)
-			.then(() => {
-				alert('Movie created successfully')
+		await AuthCheckLoggedIn(token)
+			.then(async () => {
+				await InsertMovie(formData, token).then(() => {
+					alert('Movie created successfully')
+				})
 			})
-			.catch(error => console.log(error))
+			.catch(error => {
+				if (!error.isLoggedIn) SetIsLoggedIn(false)
+			})
 
 		SetName('')
 		SetTime('')

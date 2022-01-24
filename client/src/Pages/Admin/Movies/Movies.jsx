@@ -4,15 +4,14 @@ import { useNavigate } from 'react-router-dom'
 
 import styled from 'styled-components'
 
-// components
+// Components
 import Title from 'Components/StyledComponents/Title'
 
-// utils
-import {
-	GetMoviesByAuthor,
-	DeleteMovieById,
-	AuthUserData,
-} from 'Utils/Api'
+// Utils
+import { GetMoviesByAuthor, DeleteMovieById, AuthUserData } from 'Utils/Api'
+
+// Context
+import AuthConsumer from 'Contexts/Auth'
 
 const MoviesContainer = styled.div`
 	width: 100%;
@@ -70,6 +69,8 @@ const MoviesActionButton = styled.button`
 `
 
 const Movies = () => {
+	const { IsLoggedIn, SetIsLoggedIn } = AuthConsumer()
+
 	const Navigate = useNavigate()
 	const [Movies, SetMovies] = useState([])
 
@@ -91,14 +92,17 @@ const Movies = () => {
 						})
 						.catch(error => console.log(error))
 				})
+				.catch(error => {
+					if (!error.isLoggedIn && isMounted) SetIsLoggedIn(false)
+				})
 		}
 
-		AsyncGetMoviesByAuthor()
+		if (IsLoggedIn) AsyncGetMoviesByAuthor()
 
 		return () => {
 			isMounted = false
 		}
-	}, [])
+	}, [IsLoggedIn, SetIsLoggedIn])
 
 	const Delete = id => {
 		const confirm = window.confirm('Are you sure you want to delete')
@@ -120,13 +124,13 @@ const Movies = () => {
 								.then(movies => {
 									SetMovies(movies)
 								})
-								.catch(error => console.log(error))
+								.catch(error => SetMovies([]))
 						})
 				})
-				.catch(error => console.log(error))
+				.catch(() => {})
 		}
 
-		AsyncDelete()
+		if (IsLoggedIn) AsyncDelete()
 	}
 
 	return (

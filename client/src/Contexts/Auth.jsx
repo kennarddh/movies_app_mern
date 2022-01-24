@@ -15,11 +15,16 @@ export const AuthProvider = ({ children }) => {
 
 			if (isMounted && !token) SetIsLoggedIn(false)
 
-			await AuthCheckLoggedIn(token).then(response => {
-				if (isMounted && !response.data.isLoggedIn) SetIsLoggedIn(false)
+			await AuthCheckLoggedIn(token)
+				.then(response => {
+					if (isMounted && !response.data.isLoggedIn)
+						SetIsLoggedIn(false)
 
-				if (isMounted) SetIsLoggedIn(true)
-			})
+					if (isMounted) SetIsLoggedIn(true)
+				})
+				.catch(error => {
+					if (!error.isLoggedIn) SetIsLoggedIn(false)
+				})
 		}
 
 		AsyncAuthCheckIsLoggedIn()

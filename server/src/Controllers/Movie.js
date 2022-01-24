@@ -1,5 +1,3 @@
-import { Types } from 'mongoose'
-
 // Utils
 import AsyncUnlink from '../Utils/AsyncUnlink'
 
@@ -52,7 +50,7 @@ export const UpdateMovie = async (req, res) => {
 	await Movie.findById(req.params.id)
 		.exec()
 		.then(async movie => {
-			if (file) await AsyncUnlink(`uploads/movies/image/${movie.image}`)
+			if (file) await AsyncUnlink(`public/uploads/movies/image/${movie.image}`)
 
 			const newMovie = movie
 
@@ -96,6 +94,8 @@ export const DeleteMovie = async (req, res) => {
 					.status(404)
 					.json({ success: false, error: `Movie not found` })
 			}
+
+			AsyncUnlink(`public/uploads/movies/image/${movie.image}`)
 
 			return res.status(200).json({ success: true, data: movie })
 		})
