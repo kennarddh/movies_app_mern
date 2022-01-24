@@ -10,7 +10,12 @@ import CustomInput from 'Components/StyledComponents/CustomInput'
 import CustomForm from 'Components/StyledComponents/CustomForm'
 
 // Utils
-import { UpdateMovieById, GetMovieById, AuthCheckLoggedIn } from 'Utils/Api'
+import {
+	UpdateMovieById,
+	GetMovieById,
+	AuthCheckLoggedIn,
+	UploadsUrl,
+} from 'Utils/Api'
 import Clamp from 'Utils/Clamp'
 
 // Context
@@ -21,6 +26,8 @@ const UpdateMoviesContainer = styled.div`
 	height: 100vh;
 	display: flex;
 	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 `
 
 const UpdateMoviesFormWrapper = styled.div`
@@ -29,6 +36,13 @@ const UpdateMoviesFormWrapper = styled.div`
 	justify-content: center;
 	flex-direction: column;
 	gap: 30px;
+`
+
+const CreateMoviesImagePreview = styled.img`
+	width: 250px;
+	height: 250px;
+	border-radius: 15px;
+	border: 1px solid #eee;
 `
 
 const UpdateMovies = () => {
@@ -40,6 +54,7 @@ const UpdateMovies = () => {
 	const [Time, SetTime] = useState('')
 	const [Rating, SetRating] = useState(0)
 	const [Image, SetImage] = useState(null)
+	const [ImagePreview, SetImagePreview] = useState(null)
 
 	useEffect(() => {
 		let isMounted = true
@@ -71,6 +86,7 @@ const UpdateMovies = () => {
 						SetName(movie.name)
 						SetTime(movie.time.join(', '))
 						SetRating(movie.rating)
+						SetImage(movie.image)
 					}
 				})
 				.catch(() => alert("Movies don't exist"))
@@ -82,6 +98,14 @@ const UpdateMovies = () => {
 			isMounted = false
 		}
 	}, [id])
+
+	useEffect(() => {
+		if (Image !== null && typeof Image !== 'string') {
+			SetImagePreview(URL.createObjectURL(Image))
+		} else {
+			SetImagePreview(`${UploadsUrl}movies/image/${Image}`)
+		}
+	}, [Image])
 
 	const Update = async () => {
 		if (!IsLoggedIn) return
@@ -114,6 +138,7 @@ const UpdateMovies = () => {
 		<>
 			<UpdateMoviesContainer>
 				<Title title='Update Movies' />
+				<CreateMoviesImagePreview src={ImagePreview} />
 				<UpdateMoviesFormWrapper>
 					<CustomForm buttonTitle='Update' onSubmit={Update}>
 						<CustomInput

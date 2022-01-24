@@ -43,7 +43,7 @@ const CustomInput = ({ value, onChange, type, id, label, ...inputProps }) => {
 			<CustomInputContainer>
 				<CustomInputLabel htmlFor={id} type={type}>
 					{type === 'file' && <FontAwesomeIcon icon={faUpload} />}
-					{label}
+					{label ? label : 'Upload'}
 				</CustomInputLabel>
 				<CustomInputInput
 					id={id}

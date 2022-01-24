@@ -19,6 +19,8 @@ const CreateMoviesContainer = styled.div`
 	height: 100vh;
 	display: flex;
 	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 `
 
 const CreateMoviesFormWrapper = styled.div`
@@ -29,6 +31,13 @@ const CreateMoviesFormWrapper = styled.div`
 	gap: 30px;
 `
 
+const CreateMoviesImagePreview = styled.img`
+	width: 250px;
+	height: 250px;
+	border-radius: 15px;
+	border: 1px solid #eee;
+`
+
 const CreateMovies = () => {
 	const { IsLoggedIn, SetIsLoggedIn } = AuthConsumer()
 
@@ -36,13 +45,14 @@ const CreateMovies = () => {
 	const [Time, SetTime] = useState('')
 	const [Rating, SetRating] = useState(0)
 	const [Image, SetImage] = useState(null)
+	const [ImagePreview, SetImagePreview] = useState(null)
 
 	useEffect(() => {
 		let isMounted = true
 
 		const AsyncAuthCheckLoggedIn = async () => {
 			const token = window.localStorage.getItem('token')
-			
+
 			await AuthCheckLoggedIn(token).catch(error => {
 				if (!error.isLoggedIn && isMounted) SetIsLoggedIn(false)
 			})
@@ -54,6 +64,10 @@ const CreateMovies = () => {
 			isMounted = false
 		}
 	}, [SetIsLoggedIn])
+
+	useEffect(() => {
+		if (Image !== null) SetImagePreview(URL.createObjectURL(Image))
+	}, [Image])
 
 	const Create = async () => {
 		if (!IsLoggedIn) return
@@ -90,6 +104,7 @@ const CreateMovies = () => {
 		<>
 			<CreateMoviesContainer>
 				<Title title='Create Movies' />
+				<CreateMoviesImagePreview src={ImagePreview} />
 				<CreateMoviesFormWrapper>
 					<CustomForm
 						buttonTitle='Create'
