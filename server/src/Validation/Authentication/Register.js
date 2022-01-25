@@ -12,8 +12,10 @@ const Register = () => {
 			.trim()
 			.not()
 			.isEmpty()
+			.bail()
 			.escape()
 			.isLength({ max: 32 })
+			.bail()
 			.custom(async value => {
 				await User.findOne({ username: value })
 					.exec()
@@ -25,13 +27,21 @@ const Register = () => {
 						}
 					})
 			}),
-		body('name').trim().not().isEmpty().escape().isLength({ max: 32 }),
+		body('name')
+			.trim()
+			.not()
+			.isEmpty()
+			.bail()
+			.escape()
+			.isLength({ max: 32 }),
 		body('email')
 			.trim()
 			.not()
 			.isEmpty()
+			.bail()
 			.escape()
 			.isEmail()
+			.bail()
 			.normalizeEmail({ all_lowercase: true })
 			.custom(async value => {
 				await User.findOne({ email: value })
@@ -48,6 +58,7 @@ const Register = () => {
 			.trim()
 			.not()
 			.isEmpty()
+			.bail()
 			.isString()
 			.custom(value => {
 				if (/\s/g.test(value)) {
@@ -56,6 +67,7 @@ const Register = () => {
 					return true
 				}
 			})
+			.bail()
 			.isLength({ min: 8, max: 32 }),
 		CheckValidationError,
 	]

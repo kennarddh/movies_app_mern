@@ -34,15 +34,8 @@ export const Register = async (req, res) => {
 export const Login = async (req, res) => {
 	const { body } = req
 
-	if (!body) {
-		return res.status(400).json({
-			success: false,
-			error: 'You must provide a user',
-		})
-	}
-
 	await User.findOne({
-		email: body.email.toLowerCase(),
+		email: body.email,
 	})
 		.exec()
 		.then(user => {
