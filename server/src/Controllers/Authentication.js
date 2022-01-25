@@ -7,28 +7,6 @@ import User from '../Models/User'
 export const Register = async (req, res) => {
 	const { body } = req
 
-	if (!body) {
-		return res.status(400).json({
-			success: false,
-			error: 'You must provide a user',
-		})
-	}
-
-	const takenUsername = await User.findOne({
-		username: body.username.toLowerCase(),
-	})
-
-	const takenEmail = await User.findOne({
-		email: body.email.toLowerCase(),
-	})
-
-	if (takenUsername || takenEmail) {
-		return res.status(400).json({
-			success: false,
-			error: 'Username or email has already taken',
-		})
-	}
-
 	const user = new User({
 		username: body.username.toLowerCase(),
 		name: body.name,
@@ -42,13 +20,13 @@ export const Register = async (req, res) => {
 			return res.status(201).json({
 				success: true,
 				id: user._id,
-				message: 'User created!',
+				message: 'User created',
 			})
 		})
-		.catch(error => {
-			return res.status(400).json({
-				error,
-				message: 'User not created!',
+		.catch(() => {
+			return res.status(500).json({
+				success: false,
+				error: 'User not created',
 			})
 		})
 }
@@ -71,7 +49,7 @@ export const Login = async (req, res) => {
 			if (!user) {
 				return res.status(400).json({
 					success: false,
-					error: 'Invalid username or password',
+					error: 'Invalid email or password',
 				})
 			}
 
@@ -81,7 +59,7 @@ export const Login = async (req, res) => {
 					if (!isPasswordCorrect) {
 						return res.status(400).json({
 							success: false,
-							error: 'Invalid username or password',
+							error: 'Invalid email or password',
 						})
 					}
 
@@ -96,9 +74,10 @@ export const Login = async (req, res) => {
 						{ expiresIn: 86400 },
 						(error, token) => {
 							if (error)
-								return res
-									.status(400)
-									.json({ success: false, error })
+								return res.status(400).json({
+									success: false,
+									error: 'Login Failed',
+								})
 
 							return res.status(200).json({
 								success: true,
@@ -110,15 +89,26 @@ export const Login = async (req, res) => {
 		})
 }
 
-export const GetUserData = (req, res) => {
-	return res.status(200).json({
-		success: true,
-		isLoggedIn: true,
-		data: {
-			id: req.user.id,
-			username: req.user.username,
-		},
-	})
+export const GetUserData = async (req, res) => {
+	await User.findById(req.user.id)
+		.exec()
+		.then(user => {
+			return res.status(200).json({
+				success: true,
+				isLoggedIn: true,
+				data: {
+					id: user.id,
+					username: user.username,
+					name: user.name,
+					email: user.email,
+				},
+			})
+		})
+		.catch(() => {
+			return res
+				.status(400)
+				.json({ success: false, error: 'User Not Found' })
+		})
 }
 
 export const IsUserLoggedIn = (req, res) => {
