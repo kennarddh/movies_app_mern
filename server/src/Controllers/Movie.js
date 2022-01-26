@@ -80,17 +80,13 @@ export const DeleteMovie = async (req, res) => {
 	await Movie.findByIdAndDelete({ _id: req.params.id })
 		.exec()
 		.then(movie => {
-			if (!movie) {
-				return res
-					.status(404)
-					.json({ success: false, error: `Movie not found` })
-			}
-
 			AsyncUnlink(`public/uploads/movies/image/${movie.image}`)
 
 			return res.status(200).json({ success: true, data: movie })
 		})
-		.catch(error => res.status(400).json({ success: false, error }))
+		.catch(() =>
+			res.status(400).json({ success: false, error: `Movie not found` })
+		)
 }
 
 export const GetMovieById = async (req, res) => {
