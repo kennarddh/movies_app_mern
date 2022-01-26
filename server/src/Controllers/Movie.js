@@ -37,13 +37,6 @@ export const CreateMovie = async (req, res) => {
 export const UpdateMovie = async (req, res) => {
 	const { body, file } = req
 
-	if (!body) {
-		return res.status(400).json({
-			success: false,
-			error: 'You must provide a body to update',
-		})
-	}
-
 	await Movie.findById(req.params.id)
 		.exec()
 		.then(async movie => {
