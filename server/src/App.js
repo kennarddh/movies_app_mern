@@ -23,11 +23,12 @@ const PORT = process.env.PORT || 3000
 app.use(express.static('public'))
 
 // Middleware
-const urlencodedParser = bodyParser.urlencoded({ extended: false })
-
 app.use(compression())
 app.use(helmet())
-app.use(bodyParser.json(), urlencodedParser)
+
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
+
 app.use(cors())
 
 // Database

@@ -14,11 +14,10 @@ const VerifyMoviesAuthor = async (req, res, next) => {
 				})
 			}
 		})
-		.catch(error => {
-			return res.status(404).json({
+		.catch(() => {
+			return res.status(400).json({
 				success: false,
-				error,
-				message: 'Movie not found!',
+				message: 'Movie not found',
 			})
 		})
 }

@@ -1,5 +1,7 @@
 import express from 'express'
 
+import multer from 'multer'
+
 // Controllers
 import {
 	CreateMovie,
@@ -17,12 +19,19 @@ import VerifyMoviesAuthor from '../Middleware/VerifyMoviesAuthor'
 // Utils
 import Upload from '../Utils/Multer/Upload'
 
+// Validation
+import CreateMovieValidation from '../Validation/Movies/CreateMovie'
+
 const Router = express.Router()
 
-Router.post('/movie', [VerifyJWT, Upload.single('image')], CreateMovie)
+Router.post(
+	'/movie',
+	[VerifyJWT, Upload.single('image'), ...CreateMovieValidation()],
+	CreateMovie
+)
 Router.put(
 	'/movie/:id',
-	[VerifyJWT, VerifyMoviesAuthor, Upload.single('image')],
+	[multer().none(), VerifyJWT, VerifyMoviesAuthor, Upload.single('image')],
 	UpdateMovie
 )
 Router.delete('/movie/:id', [VerifyJWT, VerifyMoviesAuthor], DeleteMovie)

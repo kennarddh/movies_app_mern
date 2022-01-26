@@ -7,17 +7,13 @@ import Movie from '../Models/Movie'
 export const CreateMovie = async (req, res) => {
 	const { body, file } = req
 
-	if (!body) {
-		return res.status(400).json({
-			success: false,
-			error: 'You must provide a movie',
-		})
-	}
-
-	body.author = req.user.id
-	body.image = file.filename
-
-	const movie = new Movie(body)
+	const movie = new Movie({
+		author: req.user.id,
+		name: body.name,
+		time: body.time,
+		rating: body.rating,
+		image: file.filename,
+	})
 
 	await movie
 		.save()
@@ -25,14 +21,15 @@ export const CreateMovie = async (req, res) => {
 			return res.status(201).json({
 				success: true,
 				id: movie._id,
-				message: 'Movie created!',
+				message: 'Movie created',
 			})
 		})
-		.catch(error => {
+		.catch(async () => {
+			await AsyncUnlink(`public/uploads/movies/image/${file.filename}`)
+
 			return res.status(400).json({
 				success: false,
-				error,
-				message: 'Movie not created!',
+				message: 'Movie not created',
 			})
 		})
 }
@@ -50,7 +47,8 @@ export const UpdateMovie = async (req, res) => {
 	await Movie.findById(req.params.id)
 		.exec()
 		.then(async movie => {
-			if (file) await AsyncUnlink(`public/uploads/movies/image/${movie.image}`)
+			if (file)
+				await AsyncUnlink(`public/uploads/movies/image/${movie.image}`)
 
 			const newMovie = movie
 
