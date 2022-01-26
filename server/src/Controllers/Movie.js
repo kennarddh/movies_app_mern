@@ -153,13 +153,23 @@ export const GetMoviesByAuthor = async (req, res) => {
 	await Movie.find({ author: req.params.author_id })
 		.exec()
 		.then(movies => {
-			if (!movies.length) {
-				return res
-					.status(404)
-					.json({ success: false, error: `Movie not found` })
-			}
-
-			return res.status(200).json({ success: true, data: movies })
+			return res.status(200).json({
+				success: true,
+				data: movies.map(movie => {
+					return {
+						_id: movie._id,
+						name: movie.name,
+						time: movie.time[0].split(','),
+						rating: movie.rating,
+						author: movie.author,
+						image: movie.image,
+						createdAt: movie.createdAt,
+						updatedAt: movie.updatedAt,
+					}
+				}),
+			})
 		})
-		.catch(error => res.status(400).json({ success: false, error }))
+		.catch(() =>
+			res.status(400).json({ success: false, error: `Movie not found` })
+		)
 }
