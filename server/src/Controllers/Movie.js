@@ -128,7 +128,21 @@ export const GetMovies = async (req, res) => {
 	await Movie.find()
 		.exec()
 		.then(movies => {
-			return res.status(200).json({ success: true, data: movies })
+			return res.status(200).json({
+				success: true,
+				data: movies.map(movie => {
+					return {
+						_id: movie._id,
+						name: movie.name,
+						time: movie.time[0].split(','),
+						rating: movie.rating,
+						author: movie.author,
+						image: movie.image,
+						createdAt: movie.createdAt,
+						updatedAt: movie.updatedAt,
+					}
+				}),
+			})
 		})
 		.catch(() =>
 			res.status(400).json({ success: false, error: `Movie not found` })
