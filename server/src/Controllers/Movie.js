@@ -82,7 +82,19 @@ export const DeleteMovie = async (req, res) => {
 		.then(movie => {
 			AsyncUnlink(`public/uploads/movies/image/${movie.image}`)
 
-			return res.status(200).json({ success: true, data: movie })
+			return res.status(200).json({
+				success: true,
+				data: {
+					_id: movie._id,
+					name: movie.name,
+					time: movie.time,
+					rating: movie.rating,
+					author: movie.author,
+					image: movie.image,
+					createdAt: movie.createdAt,
+					updatedAt: movie.updatedAt,
+				},
+			})
 		})
 		.catch(() =>
 			res.status(400).json({ success: false, error: `Movie not found` })
@@ -93,30 +105,34 @@ export const GetMovieById = async (req, res) => {
 	await Movie.findById(req.params.id)
 		.exec()
 		.then(movie => {
-			if (!movie) {
-				return res
-					.status(404)
-					.json({ success: false, error: `Movie not found` })
-			}
-
-			return res.status(200).json({ success: true, data: movie })
+			return res.status(200).json({
+				success: true,
+				data: {
+					_id: movie._id,
+					name: movie.name,
+					time: movie.time,
+					rating: movie.rating,
+					author: movie.author,
+					image: movie.image,
+					createdAt: movie.createdAt,
+					updatedAt: movie.updatedAt,
+				},
+			})
 		})
-		.catch(error => res.status(400).json({ success: false, error }))
+		.catch(() =>
+			res.status(400).json({ success: false, error: `Movie not found` })
+		)
 }
 
 export const GetMovies = async (req, res) => {
 	await Movie.find()
 		.exec()
 		.then(movies => {
-			if (!movies.length) {
-				return res
-					.status(404)
-					.json({ success: false, error: `Movie not found` })
-			}
-
 			return res.status(200).json({ success: true, data: movies })
 		})
-		.catch(error => res.status(400).json({ success: false, error }))
+		.catch(() =>
+			res.status(400).json({ success: false, error: `Movie not found` })
+		)
 }
 
 export const GetMoviesByAuthor = async (req, res) => {
