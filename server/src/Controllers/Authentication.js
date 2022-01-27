@@ -98,15 +98,10 @@ export const GetUserData = async (req, res) => {
 			})
 		})
 		.catch(() => {
-			return res
-				.status(400)
-				.json({ success: false, error: 'User Not Found' })
+			return res.status(400).json({
+				success: false,
+				isLoggedIn: true,
+				error: 'User Not Found',
+			})
 		})
-}
-
-export const IsUserLoggedIn = (req, res) => {
-	return res.status(200).json({
-		success: true,
-		isLoggedIn: true,
-	})
 }

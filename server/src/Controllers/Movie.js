@@ -20,6 +20,7 @@ export const CreateMovie = async (req, res) => {
 		.then(() => {
 			return res.status(201).json({
 				success: true,
+				isLoggedIn: true,
 				id: movie._id,
 				message: 'Movie created',
 			})
@@ -29,6 +30,7 @@ export const CreateMovie = async (req, res) => {
 
 			return res.status(400).json({
 				success: false,
+				isLoggedIn: true,
 				message: 'Movie not created',
 			})
 		})
@@ -56,14 +58,15 @@ export const UpdateMovie = async (req, res) => {
 				.then(() => {
 					return res.status(200).json({
 						success: true,
+						isLoggedIn: true,
 						id: movie._id,
 						message: 'Movie updated!',
 					})
 				})
-				.catch(error => {
-					return res.status(404).json({
+				.catch(() => {
+					return res.status(400).json({
 						success: false,
-						error,
+						isLoggedIn: true,
 						message: 'Movie not updated!',
 					})
 				})
@@ -71,6 +74,7 @@ export const UpdateMovie = async (req, res) => {
 		.catch(() => {
 			return res.status(400).json({
 				success: false,
+				isLoggedIn: true,
 				error: 'Movie not found!',
 			})
 		})
@@ -84,6 +88,7 @@ export const DeleteMovie = async (req, res) => {
 
 			return res.status(200).json({
 				success: true,
+				isLoggedIn: true,
 				data: {
 					_id: movie._id,
 					name: movie.name,
@@ -97,7 +102,11 @@ export const DeleteMovie = async (req, res) => {
 			})
 		})
 		.catch(() =>
-			res.status(400).json({ success: false, error: `Movie not found` })
+			res.status(400).json({
+				success: false,
+				isLoggedIn: true,
+				error: `Movie not found`,
+			})
 		)
 }
 
