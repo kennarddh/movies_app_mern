@@ -69,7 +69,7 @@ const Register = () => {
 			})
 			.bail()
 			.isLength({ min: 8, max: 32 }),
-		CheckValidationError,
+		CheckValidationError(),
 	]
 
 	return validator

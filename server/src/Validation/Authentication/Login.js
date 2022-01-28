@@ -3,7 +3,7 @@ import { body } from 'express-validator'
 // Middleware
 import CheckValidationError from '../../Middleware/CheckValidationError'
 
-const Register = () => {
+const Login = () => {
 	const validator = [
 		body('email')
 			.trim()
@@ -30,10 +30,10 @@ const Register = () => {
 			})
 			.bail()
 			.isLength({ min: 8, max: 32 }),
-		CheckValidationError,
+		CheckValidationError(),
 	]
 
 	return validator
 }
 
-export default Register
+export default Login
