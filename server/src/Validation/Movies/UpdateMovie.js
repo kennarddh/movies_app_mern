@@ -6,9 +6,18 @@ import AsyncUnlink from '../../Utils/AsyncUnlink'
 // Middleware
 import CheckValidationError from '../../Middleware/CheckValidationError'
 
-const CreateMovie = () => {
+const UpdateMovie = () => {
 	const ValidateTime = async (req, res, next) => {
-		const { time } = req.body
+		let { time } = req.body
+
+		try {
+			time = JSON.parse(time)
+		} catch {
+			return res
+				.status(400)
+				.json({ success: false, error: 'Invalid time' })
+		}
+
 
 		if (!time || time.length === 0 || !Array.isArray(time)) {
 			await AsyncUnlink(
@@ -69,4 +78,4 @@ const CreateMovie = () => {
 	return validator
 }
 
-export default CreateMovie
+export default UpdateMovie

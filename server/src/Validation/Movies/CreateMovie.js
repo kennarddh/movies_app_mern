@@ -8,7 +8,15 @@ import CheckValidationError from '../../Middleware/CheckValidationError'
 
 const CreateMovie = () => {
 	const ValidateTime = async (req, res, next) => {
-		const { time } = req.body
+		let { time } = req.body
+
+		try {
+			time = JSON.parse(time)
+		} catch {
+			return res
+				.status(400)
+				.json({ success: false, error: 'Invalid time' })
+		}
 
 		if (!time || time.length === 0 || !Array.isArray(time)) {
 			await AsyncUnlink(
