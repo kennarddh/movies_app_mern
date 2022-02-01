@@ -1,6 +1,6 @@
 import React, { useState, useEffect, createContext, useContext } from 'react'
 
-import { AuthCheckLoggedIn } from 'Utils/Api'
+import { AuthUserData } from 'Utils/Api'
 
 export const AuthContext = createContext({})
 
@@ -15,15 +15,14 @@ export const AuthProvider = ({ children }) => {
 
 			if (isMounted && !token) SetIsLoggedIn(false)
 
-			await AuthCheckLoggedIn(token)
-				.then(response => {
-					if (isMounted && !response.data.isLoggedIn)
-						SetIsLoggedIn(false)
-
-					if (isMounted) SetIsLoggedIn(true)
+			await AuthUserData(token)
+				.then(response => response.data)
+				.then(data => {
+					if (isMounted && !data.isLoggedIn) SetIsLoggedIn(false)
 				})
 				.catch(error => {
-					if (!error.isLoggedIn) SetIsLoggedIn(false)
+					if (isMounted && !error.response.data.isLoggedIn)
+						SetIsLoggedIn(false)
 				})
 		}
 
@@ -34,21 +33,12 @@ export const AuthProvider = ({ children }) => {
 		}
 	}, [])
 
-	const Logout = () => {
-		window.localStorage.removeItem('token')
-
-		SetIsLoggedIn(false)
-
-		alert('Logout successfully')
-	}
-
 	return (
 		<>
 			<AuthContext.Provider
 				value={{
 					IsLoggedIn,
 					SetIsLoggedIn,
-					Logout,
 				}}
 			>
 				{children}

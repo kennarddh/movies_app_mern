@@ -77,23 +77,25 @@ const Movies = () => {
 	useEffect(() => {
 		let isMounted = true
 
-		const token = window.localStorage.getItem('token')
-
 		const AsyncGetMoviesByAuthor = async () => {
+			const token = window.localStorage.getItem('token')
+
 			await AuthUserData(token)
 				.then(response => response.data)
-				.then(data => data.data)
-				.then(async user => {
-					await GetMoviesByAuthor(user.id)
+				.then(async data => {
+					await GetMoviesByAuthor(data.data.id)
 						.then(response => response.data)
 						.then(data => data.data)
 						.then(movies => {
 							if (isMounted) SetMovies(movies)
 						})
-						.catch(error => console.log(error))
+						.catch(error => {
+							if (!error.response.data.isLoggedIn)
+								SetIsLoggedIn(false)
+						})
 				})
 				.catch(error => {
-					if (!error.isLoggedIn && isMounted) SetIsLoggedIn(false)
+					if (!error.response.data.isLoggedIn) SetIsLoggedIn(false)
 				})
 		}
 
@@ -116,18 +118,28 @@ const Movies = () => {
 				.then(async () => {
 					await AuthUserData(token)
 						.then(response => response.data)
-						.then(data => data.data)
-						.then(async user => {
-							await GetMoviesByAuthor(user.id)
+						.then(async data => {
+							await GetMoviesByAuthor(data.data.id)
 								.then(response => response.data)
 								.then(data => data.data)
 								.then(movies => {
 									SetMovies(movies)
 								})
-								.catch(error => SetMovies([]))
+								.catch(error => {
+									if (!error.response.data.isLoggedIn)
+										SetIsLoggedIn(false)
+
+									SetMovies([])
+								})
+						})
+						.catch(error => {
+							if (!error.response.data.isLoggedIn)
+								SetIsLoggedIn(false)
 						})
 				})
-				.catch(() => {})
+				.catch(error => {
+					if (!error.response.data.isLoggedIn) SetIsLoggedIn(false)
+				})
 		}
 
 		if (IsLoggedIn) AsyncDelete()

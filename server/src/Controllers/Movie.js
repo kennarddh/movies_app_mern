@@ -10,7 +10,7 @@ export const CreateMovie = async (req, res) => {
 	const movie = new Movie({
 		author: req.user.id,
 		name: body.name,
-		time: body.time,
+		time: JSON.parse(body.time),
 		rating: body.rating,
 		image: file.filename,
 	})
@@ -48,7 +48,7 @@ export const UpdateMovie = async (req, res) => {
 			const newMovie = movie
 
 			newMovie.name = body.name
-			newMovie.time = body.time
+			newMovie.time = JSON.parse(body.time)
 			newMovie.rating = body.rating
 
 			if (file) newMovie.image = file.filename

@@ -82,7 +82,15 @@ const NavbarItemButton = styled.button`
 `
 
 const Navbar = () => {
-	const { IsLoggedIn, Logout } = AuthConsumer()
+	const { IsLoggedIn, SetIsLoggedIn } = AuthConsumer()
+
+	const Logout = () => {
+		window.localStorage.removeItem('token')
+
+		SetIsLoggedIn(false)
+
+		alert('Logout successfully')
+	}
 
 	return (
 		<>

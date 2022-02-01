@@ -8,7 +8,7 @@ import CustomInput from 'Components/StyledComponents/CustomInput'
 import CustomForm from 'Components/StyledComponents/CustomForm'
 
 // Utils
-import { InsertMovie, AuthCheckLoggedIn } from 'Utils/Api'
+import { InsertMovie } from 'Utils/Api'
 import Clamp from 'Utils/Clamp'
 
 // Context
@@ -48,25 +48,13 @@ const CreateMovies = () => {
 	const [ImagePreview, SetImagePreview] = useState(null)
 
 	useEffect(() => {
-		let isMounted = true
-
-		const AsyncAuthCheckLoggedIn = async () => {
-			const token = window.localStorage.getItem('token')
-
-			await AuthCheckLoggedIn(token).catch(error => {
-				if (!error.isLoggedIn && isMounted) SetIsLoggedIn(false)
-			})
+		if (Image !== null) {
+			try {
+				SetImagePreview(URL.createObjectURL(Image))
+			} catch {
+				SetImagePreview(null)
+			}
 		}
-
-		AsyncAuthCheckLoggedIn()
-
-		return () => {
-			isMounted = false
-		}
-	}, [SetIsLoggedIn])
-
-	useEffect(() => {
-		if (Image !== null) SetImagePreview(URL.createObjectURL(Image))
 	}, [Image])
 
 	const Create = async () => {
@@ -79,19 +67,17 @@ const CreateMovies = () => {
 		formData.append('name', Name)
 		formData.append(
 			'time',
-			Time.split(',').map(item => item.trim())
+			JSON.stringify(Time.split(',').map(item => item.trim()))
 		)
 		formData.append('rating', parseFloat(Rating).toFixed(1))
 		formData.append('image', Image)
 
-		await AuthCheckLoggedIn(token)
-			.then(async () => {
-				await InsertMovie(formData, token).then(() => {
-					alert('Movie created successfully')
-				})
+		await InsertMovie(formData, token)
+			.then(() => {
+				alert('Movie created successfully')
 			})
 			.catch(error => {
-				if (!error.isLoggedIn) SetIsLoggedIn(false)
+				if (!error.response.data.isLoggedIn) SetIsLoggedIn(false)
 			})
 
 		SetName('')

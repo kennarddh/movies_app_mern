@@ -18,7 +18,6 @@ const UpdateMovie = () => {
 				.json({ success: false, error: 'Invalid time' })
 		}
 
-
 		if (!time || time.length === 0 || !Array.isArray(time)) {
 			await AsyncUnlink(
 				`public/uploads/movies/image/${req.file.filename}`

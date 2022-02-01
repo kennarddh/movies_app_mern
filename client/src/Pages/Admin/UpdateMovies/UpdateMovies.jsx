@@ -10,12 +10,7 @@ import CustomInput from 'Components/StyledComponents/CustomInput'
 import CustomForm from 'Components/StyledComponents/CustomForm'
 
 // Utils
-import {
-	UpdateMovieById,
-	GetMovieById,
-	AuthCheckLoggedIn,
-	UploadsUrl,
-} from 'Utils/Api'
+import { UpdateMovieById, GetMovieById, UploadsUrl } from 'Utils/Api'
 import Clamp from 'Utils/Clamp'
 
 // Context
@@ -59,29 +54,11 @@ const UpdateMovies = () => {
 	useEffect(() => {
 		let isMounted = true
 
-		const AsyncAuthCheckLoggedIn = async () => {
-			const token = window.localStorage.getItem('token')
-
-			await AuthCheckLoggedIn(token).catch(error => {
-				if (!error.isLoggedIn && isMounted) SetIsLoggedIn(false)
-			})
-		}
-
-		AsyncAuthCheckLoggedIn()
-
-		return () => {
-			isMounted = false
-		}
-	}, [SetIsLoggedIn])
-
-	useEffect(() => {
-		let isMounted = true
-
 		const AsyncGetMovie = async () => {
 			await GetMovieById(id)
-				.then(response => {
-					const movie = response.data.data
-
+				.then(response => response.data)
+				.then(data => data.data)
+				.then(movie => {
 					if (isMounted) {
 						SetName(movie.name)
 						SetTime(movie.time.join(', '))
@@ -101,7 +78,11 @@ const UpdateMovies = () => {
 
 	useEffect(() => {
 		if (Image !== null && typeof Image !== 'string') {
-			SetImagePreview(URL.createObjectURL(Image))
+			try {
+				SetImagePreview(URL.createObjectURL(Image))
+			} catch {
+				SetImagePreview(null)
+			}
 		} else {
 			SetImagePreview(`${UploadsUrl}movies/image/${Image}`)
 		}
@@ -117,7 +98,7 @@ const UpdateMovies = () => {
 		formData.append('name', Name)
 		formData.append(
 			'time',
-			Time.split(',').map(item => item.trim())
+			JSON.stringify(Time.split(',').map(item => item.trim()))
 		)
 		formData.append('rating', parseFloat(Rating).toFixed(1))
 		formData.append('image', Image)
@@ -126,7 +107,9 @@ const UpdateMovies = () => {
 			.then(() => {
 				alert('Movie updated successfully')
 			})
-			.catch(error => console.log(error))
+			.catch(error => {
+				if (!error.response.data.isLoggedIn) SetIsLoggedIn(false)
+			})
 
 		SetName('')
 		SetTime('')
