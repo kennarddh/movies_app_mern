@@ -46,11 +46,12 @@ const UpdateMovie = () => {
 	}
 
 	const ValidateImage = (req, res, next) => {
-		if (!req.file) {
-			return res
-				.status(400)
-				.json({ success: false, error: 'Invalid image' })
-		}
+		if (!req.body.image)
+			if (!req.file) {
+				return res
+					.status(400)
+					.json({ success: false, error: 'Invalid image' })
+			}
 
 		next()
 	}
